@@ -36,6 +36,8 @@ func ExampleStack_Search() {
 	s.Push(&Person{"Nikola Tesla", 1856})
 	s.Push(&Person{"Erwin Schrodinger", 1887})
 
+        // Note: For better performance it is advisable to re-use
+        // closure by defining it first and then passing to Search.
 	found, distance := s.Search(func(v interface{}) bool {
 		return v.(*Person).Name == "Nikola Tesla"
 	})
