@@ -20,9 +20,10 @@ package stack_test
 import (
 	"bytes"
 	"fmt"
-	. "github.com/kwilczynski/container/stack"
 	"reflect"
 	"testing"
+
+	. "github.com/kwilczynski/container/stack"
 )
 
 func compareStrings(this, other string) bool {
@@ -33,7 +34,7 @@ func TestNew(t *testing.T) {
 	s := New()
 	func(v interface{}) {
 		if _, ok := v.(*Stack); !ok {
-			t.Errorf("not a Stack type: %v", reflect.TypeOf(v).String())
+			t.Fatalf("not a Stack type: %s", reflect.TypeOf(v).String())
 		}
 	}(s)
 }
@@ -45,7 +46,7 @@ func TestString(t *testing.T) {
 
 	v := fmt.Sprintf("Stack{%d}", s.Len())
 	if !compareStrings(s.String(), v) {
-		t.Errorf("value given \"%v\", want \"%v\"", v, s.String())
+		t.Errorf("value given \"%s\", want \"%s\"", s.String(), v)
 	}
 }
 
@@ -60,7 +61,7 @@ func TestInit(t *testing.T) {
 
 	ok := compareStrings(err.Error(), ErrEmptyStack.Error())
 	if v != nil || !ok {
-		t.Errorf("value given {%v, %v}, want {%v, %v}",
+		t.Errorf("value given {%v, %s}, want {%v, %s}",
 			v, err.Error(), nil, ErrEmptyStack.Error())
 	}
 
@@ -78,7 +79,7 @@ func TestLen(t *testing.T) {
 	}
 
 	if s.Len() != last {
-		t.Errorf("value given %v, want %v", s.Len(), last)
+		t.Errorf("value given %d, want %d", s.Len(), last)
 	}
 
 	s.Push(0)
@@ -86,7 +87,7 @@ func TestLen(t *testing.T) {
 
 	last += 2
 	if s.Len() != last {
-		t.Errorf("value given %v, want %v", s.Len(), last)
+		t.Errorf("value given %d, want %d", s.Len(), last)
 	}
 
 	s.Init()
@@ -101,7 +102,7 @@ func TestLen(t *testing.T) {
 	}
 
 	if s.Len() != last {
-		t.Errorf("value given %v, want %v", s.Len(), last)
+		t.Errorf("value given %d, want %d", s.Len(), last)
 	}
 }
 
@@ -138,7 +139,7 @@ func TestPush(t *testing.T) {
 		}
 
 		if v.(int) != i {
-			t.Errorf("value given %v, want %v", v.(int), i)
+			t.Errorf("value given %d, want %d", v.(int), i)
 		}
 		check += v.(int)
 		sum += i
@@ -154,7 +155,7 @@ func TestPush(t *testing.T) {
 	}
 
 	if sum != check {
-		t.Errorf("value given %v, want %v", check, sum)
+		t.Errorf("value given %d, want %d", check, sum)
 	}
 }
 
@@ -164,7 +165,7 @@ func TestPeek(t *testing.T) {
 
 	ok := compareStrings(err.Error(), ErrEmptyStack.Error())
 	if v != nil || !ok {
-		t.Errorf("value given {%v, %v}, want {%v, %v}",
+		t.Errorf("value given {%v, %s}, want {%v, %s}",
 			v, err.Error(), nil, ErrEmptyStack.Error())
 	}
 
@@ -186,7 +187,7 @@ func TestPeek(t *testing.T) {
 		s.Pop()
 
 		if v.(int) != i-1 {
-			t.Errorf("value given %v, want %v", v.(int), i)
+			t.Errorf("value given %d, want %d", v.(int), i)
 		}
 	}
 
@@ -205,7 +206,7 @@ func TestPeek(t *testing.T) {
 	}
 
 	if sum != check {
-		t.Errorf("value given %v, want %v", check, sum)
+		t.Errorf("value given %d, want %d", check, sum)
 	}
 
 	if s.Empty() != true {
@@ -219,7 +220,7 @@ func TestPop(t *testing.T) {
 
 	ok := compareStrings(err.Error(), ErrEmptyStack.Error())
 	if v != nil || !ok {
-		t.Errorf("value given {%v, %v}, want {%v, %v}",
+		t.Errorf("value given {%v, %s}, want {%v, %s}",
 			v, err.Error(), nil, ErrEmptyStack.Error())
 	}
 
@@ -236,7 +237,7 @@ func TestPop(t *testing.T) {
 				reflect.TypeOf(i).Kind())
 		}
 		if v.(int) != i {
-			t.Errorf("value given %v, want %v", v.(int), i)
+			t.Errorf("value given %d, want %d", v.(int), i)
 		}
 	}
 
@@ -253,7 +254,7 @@ func TestPop(t *testing.T) {
 	}
 
 	if sum != check {
-		t.Errorf("value given %v, want %v", check, sum)
+		t.Errorf("value given %d, want %d", check, sum)
 	}
 
 	if s.Empty() != true {
@@ -273,7 +274,7 @@ func TestSearch(t *testing.T) {
 	})
 
 	if b != true || v != s.Len() {
-		t.Errorf("value given {%v, %v}, want {%v, %v}",
+		t.Errorf("value given {%v, %d}, want {%v, %d}",
 			b, v, true, s.Len())
 	}
 
@@ -285,7 +286,7 @@ func TestSearch(t *testing.T) {
 	})
 
 	if b != true || v != s.Len() {
-		t.Errorf("value given {%v, %v}, want {%v, %v}",
+		t.Errorf("value given {%v, %d}, want {%v, %d}",
 			b, v, true, s.Len())
 	}
 
@@ -296,7 +297,7 @@ func TestSearch(t *testing.T) {
 	})
 
 	if b != false || v != s.Len() {
-		t.Errorf("value given {%v, %v}, want {%v, %v}",
+		t.Errorf("value given {%v, %d}, want {%v, %d}",
 			b, v, false, s.Len())
 	}
 
@@ -307,7 +308,7 @@ func TestSearch(t *testing.T) {
 			return
 		}
 		if ok := compareStrings(r.(error).Error(), ErrNotAFunc.Error()); !ok {
-			t.Errorf("value given \"%v\", want \"%v\"",
+			t.Errorf("value given \"%s\", want \"%s\"",
 				r.(error).Error(), ErrNotAFunc.Error())
 			return
 		}
