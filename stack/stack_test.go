@@ -26,8 +26,11 @@ import (
 	. "github.com/kwilczynski/container/stack"
 )
 
-func compareStrings(this, other string) bool {
-	return bytes.Equal([]byte(this), []byte(other))
+func CompareStrings(this, other string) bool {
+        if this == "" || other == "" {
+                return false
+        }
+        return bytes.Equal([]byte(this), []byte(other))
 }
 
 func TestNew(t *testing.T) {
@@ -45,7 +48,7 @@ func TestString(t *testing.T) {
 	s.Push(1)
 
 	v := fmt.Sprintf("Stack{%d}", s.Len())
-	if !compareStrings(s.String(), v) {
+	if ok := CompareStrings(s.String(), v); !ok {
 		t.Errorf("value given \"%s\", want \"%s\"", s.String(), v)
 	}
 }
@@ -59,7 +62,7 @@ func TestInit(t *testing.T) {
 	s.Init()
 	v, err := s.Pop()
 
-	ok := compareStrings(err.Error(), ErrEmptyStack.Error())
+	ok := CompareStrings(err.Error(), ErrEmptyStack.Error())
 	if v != nil || !ok {
 		t.Errorf("value given {%v, %s}, want {%v, %s}",
 			v, err.Error(), nil, ErrEmptyStack.Error())
@@ -163,7 +166,7 @@ func TestPeek(t *testing.T) {
 	s := New()
 	v, err := s.Peek()
 
-	ok := compareStrings(err.Error(), ErrEmptyStack.Error())
+	ok := CompareStrings(err.Error(), ErrEmptyStack.Error())
 	if v != nil || !ok {
 		t.Errorf("value given {%v, %s}, want {%v, %s}",
 			v, err.Error(), nil, ErrEmptyStack.Error())
@@ -218,7 +221,7 @@ func TestPop(t *testing.T) {
 	s := New()
 	v, err := s.Pop()
 
-	ok := compareStrings(err.Error(), ErrEmptyStack.Error())
+	ok := CompareStrings(err.Error(), ErrEmptyStack.Error())
 	if v != nil || !ok {
 		t.Errorf("value given {%v, %s}, want {%v, %s}",
 			v, err.Error(), nil, ErrEmptyStack.Error())
@@ -307,7 +310,7 @@ func TestSearch(t *testing.T) {
 			t.Error("did not panic")
 			return
 		}
-		if ok := compareStrings(r.(error).Error(), ErrNotAFunc.Error()); !ok {
+		if ok := CompareStrings(r.(error).Error(), ErrNotAFunc.Error()); !ok {
 			t.Errorf("value given \"%s\", want \"%s\"",
 				r.(error).Error(), ErrNotAFunc.Error())
 			return
