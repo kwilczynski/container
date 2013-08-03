@@ -42,7 +42,7 @@ func TestNew(t *testing.T) {
 	}(s)
 }
 
-func TestString(t *testing.T) {
+func TestStack_String(t *testing.T) {
 	s := New()
 	s.Push(0)
 	s.Push(1)
@@ -53,7 +53,7 @@ func TestString(t *testing.T) {
 	}
 }
 
-func TestInit(t *testing.T) {
+func TestStack_Init(t *testing.T) {
 	s := New()
 	for i := 0; i < 10; i++ {
 		s.Push(i)
@@ -68,13 +68,14 @@ func TestInit(t *testing.T) {
 			v, err.Error(), nil, ErrEmptyStack.Error())
 	}
 
-	if !s.Empty() {
-		t.Errorf("value given %v, want %v", s.Empty(), true)
+	if ok := s.Empty(); !ok {
+		t.Errorf("value given %v, want %v", ok, true)
 	}
 }
 
-func TestLen(t *testing.T) {
+func TestStack_Len(t *testing.T) {
 	s := New()
+
 	last := 0
 	for i := 0; i < 10; i++ {
 		s.Push(i)
@@ -109,7 +110,7 @@ func TestLen(t *testing.T) {
 	}
 }
 
-func TestEmpty(t *testing.T) {
+func TestStack_Empty(t *testing.T) {
 	s := New()
 	if s.Empty() != true {
 		t.Errorf("value given %v, want %v", s.Empty(), true)
@@ -129,8 +130,9 @@ func TestEmpty(t *testing.T) {
 	}
 }
 
-func TestPush(t *testing.T) {
+func TestStack_Push(t *testing.T) {
 	s := New()
+
 	sum, check := 0, 0
 	for i := 0; i < 10; i++ {
 		s.Push(i)
@@ -162,7 +164,7 @@ func TestPush(t *testing.T) {
 	}
 }
 
-func TestPeek(t *testing.T) {
+func TestStack_Peek(t *testing.T) {
 	s := New()
 	v, err := s.Peek()
 
@@ -172,8 +174,8 @@ func TestPeek(t *testing.T) {
 			v, err.Error(), nil, ErrEmptyStack.Error())
 	}
 
-	if !s.Empty() {
-		t.Errorf("value given %v, want %v", s.Empty(), true)
+	if ok := s.Empty(); !ok {
+		t.Errorf("value given %v, want %v", ok, true)
 	}
 
 	for i := 0; i < 10; i++ {
@@ -212,12 +214,12 @@ func TestPeek(t *testing.T) {
 		t.Errorf("value given %d, want %d", check, sum)
 	}
 
-	if s.Empty() != true {
-		t.Errorf("value given %v, want %v", s.Empty(), true)
+	if ok := s.Empty(); !ok {
+		t.Errorf("value given %v, want %v", ok, true)
 	}
 }
 
-func TestPop(t *testing.T) {
+func TestStack_Pop(t *testing.T) {
 	s := New()
 	v, err := s.Pop()
 
@@ -227,8 +229,8 @@ func TestPop(t *testing.T) {
 			v, err.Error(), nil, ErrEmptyStack.Error())
 	}
 
-	if !s.Empty() {
-		t.Errorf("value given %v, want %v", s.Empty(), true)
+	if ok := s.Empty(); !ok {
+		t.Errorf("value given %v, want %v", ok, true)
 	}
 
 	for i := 0; i < 10; i++ {
@@ -260,12 +262,12 @@ func TestPop(t *testing.T) {
 		t.Errorf("value given %d, want %d", check, sum)
 	}
 
-	if s.Empty() != true {
-		t.Errorf("value given %v, want %v", s.Empty(), true)
+	if ok := s.Empty(); !ok {
+		t.Errorf("value given %v, want %v", ok, true)
 	}
 }
 
-func TestSearch(t *testing.T) {
+func TestStack_Search(t *testing.T) {
 	s := New()
 
 	for i := 1; i <= 10; i++ {

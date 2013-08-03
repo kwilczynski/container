@@ -30,9 +30,9 @@ import (
 )
 
 var (
-	// Pop and Peek returns this error when the Stack is empty.
+	// ErrEmptyStack is the error returned by Pop and Peek when the Stack is empty.
 	ErrEmptyStack = errors.New("stack: stack is empty")
-	// Search will panic with this error when given function is invalid.
+	// ErrNotAFunc is the error returned by Search when given callback function is invalid.
 	ErrNotAFunc = errors.New("stack: not a function or nil pointer")
 )
 
@@ -50,17 +50,13 @@ type Element struct {
 
 // Init initialises or clears a Stack.
 func (s *Stack) Init() *Stack {
-	s.top = nil
-	s.size = 0
+	s.top, s.size = nil, 0
 	return s
 }
 
 // New returns an initialised Stack.
 func New() *Stack {
-	return &Stack{
-		top:  nil,
-		size: 0,
-	}
+	return &Stack{top: nil, size: 0}
 }
 
 // String returns a string representation a Stack.
@@ -78,16 +74,12 @@ func (s *Stack) Empty() bool {
 	if s.size == 0 {
 		return true
 	}
-
 	return false
 }
 
 // Push pushes an element onto the top of the Stack.
 func (s *Stack) Push(value interface{}) {
-	s.top = &Element{
-		value: value,
-		next:  s.top,
-	}
+	s.top = &Element{value: value, next: s.top}
 	s.size++
 }
 
@@ -97,7 +89,6 @@ func (s *Stack) Peek() (interface{}, error) {
 	if s.Empty() {
 		return nil, ErrEmptyStack
 	}
-
 	return s.top.value, nil
 }
 
@@ -107,12 +98,9 @@ func (s *Stack) Pop() (interface{}, error) {
 	if s.Empty() {
 		return nil, ErrEmptyStack
 	}
-
 	value := s.top.value
 	s.top = s.top.next
-
 	s.size--
-
 	return value, nil
 }
 
@@ -125,11 +113,12 @@ func (s *Stack) Pop() (interface{}, error) {
 // If an element occurs more than once in the Stack then only occurrence nearest
 // the top of the Stack is taken into the account.
 //
-// Search takes a function that will be used to determine whether a given item
-// exists on the Stack or not. Such function should return a single boolean value.
+// Search takes a callback function that will be used to determine whether a given
+// item exists on the Stack or not. Such function should return a single boolean
+// value.
 //
-// Search will call given function for every element on the Stack proceeding in
-// a descending order passing an element taken from the Stack as its argument.
+// Search will call given callback function for every element on the Stack proceeding
+// in a descending order passing an element taken from the Stack as its argument.
 func (s *Stack) Search(f func(element interface{}) bool) (bool, int) {
 	if f == nil || reflect.TypeOf(f).Kind() != reflect.Func {
 		panic(ErrNotAFunc)
@@ -142,6 +131,5 @@ func (s *Stack) Search(f func(element interface{}) bool) (bool, int) {
 			return true, distance
 		}
 	}
-
 	return false, distance
 }
