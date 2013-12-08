@@ -15,23 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package stack_test
+package stack
 
 import (
-	"bytes"
 	"fmt"
 	"reflect"
 	"testing"
-
-	. "github.com/kwilczynski/container/stack"
 )
-
-func CompareStrings(this, other string) bool {
-        if this == "" || other == "" {
-                return false
-        }
-        return bytes.Equal([]byte(this), []byte(other))
-}
 
 func TestNew(t *testing.T) {
 	s := New()
