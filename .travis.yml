@@ -15,5 +15,5 @@ branches:
     - master
 install: true
 before_script:
-  - go get -v -x github.com/kwilczynski/container/stack
+  - travis_retry go get -v -x github.com/kwilczynski/container/stack
 script: go test -v -x ./... -run '^Test.*'
