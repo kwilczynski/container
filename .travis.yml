@@ -6,6 +6,9 @@ go:
   - 1.2
   - 1.2.1
   - tip
+env:
+  global:
+    - secure: "eXCuDpjmHU+vY5dK+tKSGXONLNYzkDbpB6sHkPMtaVe6lvrwmLhUXQqvHU9+VO8d/eSv2a8dSoeT4roM8pMyGPvLLXuSCVpe6A4lPDqEuKS98aKT7Z3slzWki08xLfU3t+o8Z66CDfnY/EMTGDH8bHMCPp1FouSitIwFl7++wlo="
 matrix:
   allow_failures:
     - go: tip
@@ -13,7 +16,18 @@ matrix:
 branches:
   only:
     - master
+before_install:
+  # TODO(kwilczynski): Possibly a good candidate for https://github.com/tools/godep.
+  - travis_retry go get -v -x code.google.com/p/go.tools/cmd/cover
+  - travis_retry go get -v -x github.com/axw/gocov/gocov
+  - travis_retry go get -v -x github.com/mattn/goveralls
 install: true
 before_script:
+  - export PATH=${PATH}:${HOME}/gopath/bin:${GOPATH}
+  - travis_retry sudo apt-get install -y --force-yes bc
+  - export GO_VERSION=$(go version | perl -ne 'print $1 if /^.+go([0-9]\.[0-9])/')
+  - if [ ! "x$(echo "$GO_VERSION < 1.2" | bc)" == "x0" ]; then OLD_GO_VERSION=true; fi
+  - export OLD_GO_VERSION # XXX(kwilczynski): Ugly hack for Go prior to 1.2 ...
   - travis_retry go get -v -x github.com/kwilczynski/container/stack
-script: go test -v -x ./... -run '^Test.*'
+script:
+  - if [ "x${OLD_GO_VERSION}" == "xtrue" ]; then go test -v -x ./...; else goveralls -v -repotoken $REPOSITORY_TOKEN; fi
