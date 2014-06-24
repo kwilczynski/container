@@ -4,30 +4,25 @@ go:
   - 1.1
   - 1.1.2
   - 1.2
-  - 1.2.1
+  - 1.2.2
+  - 1.3
   - tip
 env:
-  global:
-    - secure: "eXCuDpjmHU+vY5dK+tKSGXONLNYzkDbpB6sHkPMtaVe6lvrwmLhUXQqvHU9+VO8d/eSv2a8dSoeT4roM8pMyGPvLLXuSCVpe6A4lPDqEuKS98aKT7Z3slzWki08xLfU3t+o8Z66CDfnY/EMTGDH8bHMCPp1FouSitIwFl7++wlo="
+  - secure: "eCAx50OXbU5V3d65riaurCUQkma9/JXMeB86ozdXQN8k/ZAyNCwarTJaPE34pqB5pmZGiY3aH/HWmx6/gFQXJVEmhVO0YbcfASaBIqoBAwk4zkPxTutexnOLeKCNGqWLDF9Pd6u/ya6dyaD/JDVG24fJGP47ZVx+CFkZodkfmw4="
 matrix:
+  fast_finish: true
   allow_failures:
     - go: tip
-  fast_finish: true
 branches:
   only:
     - master
-before_install:
-  # TODO(kwilczynski): Possibly a good candidate for https://github.com/tools/godep.
-  - travis_retry go get -v -x code.google.com/p/go.tools/cmd/cover
-  - travis_retry go get -v -x github.com/axw/gocov/gocov
-  - travis_retry go get -v -x github.com/mattn/goveralls
 install: true
 before_script:
   - export PATH=${PATH}:${HOME}/gopath/bin:${GOPATH}
-  - travis_retry sudo apt-get install -y --force-yes bc
-  - export GO_VERSION=$(go version | perl -ne 'print $1 if /^.+go([0-9]\.[0-9])/')
-  - if [ ! "x$(echo "$GO_VERSION < 1.2" | bc)" == "x0" ]; then OLD_GO_VERSION=true; fi
-  - export OLD_GO_VERSION # XXX(kwilczynski): Ugly hack for Go prior to 1.2 ...
+  - export FRESH_VERSION=$(go version | perl -ne 'print "true" if /^.+go(1\.(2(\.[23])?|3))/')
+  - if [ "x${FRESH_VERSION}" == "xtrue" ]; then travis_retry go get -v -x code.google.com/p/go.tools/cmd/cover; fi
+  - if [ "x${FRESH_VERSION}" == "xtrue" ]; then travis_retry go get -v -x github.com/axw/gocov/gocov; fi
+  - if [ "x${FRESH_VERSION}" == "xtrue" ]; then travis_retry go get -v -x github.com/mattn/goveralls; fi
   - travis_retry go get -v -x github.com/kwilczynski/container/stack
 script:
-  - if [ "x${OLD_GO_VERSION}" == "xtrue" ]; then go test -v -x ./...; else goveralls -v -repotoken $REPOSITORY_TOKEN; fi
+  - if [ "x${FRESH_VERSION}" == "xtrue" ]; then goveralls -v -repotoken $REPOSITORY_TOKEN; else go test -v -x ./...; fi
