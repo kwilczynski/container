@@ -22,6 +22,7 @@ install: true
 before_script:
   - export PATH=${PATH}:${HOME}/gopath/bin:${GOPATH}
   - export FRESH_VERSION=$(go version | perl -ne 'print "true" if /^.+go(1\.(2(\.[23])?|[34]))|devel/')
+  - export GO_VERSION=$(go version | perl -ne 'print ($1 || 99.99) if /^.+go([0-9]\.[0-9])|devel/')
   - |
     if [ "x${FRESH_VERSION}" == "xtrue" ]; then
       URL="golang.org/x/tools/cmd/cover"
