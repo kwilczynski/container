@@ -25,9 +25,14 @@ before_script:
       URL="golang.org/x/tools/cmd/cover"
       if [ "x$(echo "$GO_VERSION < 1.4" | bc)" != "x0" ]; then URL="code.google.com/p/go.tools/cmd/cover"; fi
       travis_retry go get -v -x $URL
+      travis_retry go get -v -x github.com/axw/gocov/gocov
     fi
-  - if [ "x${FRESH_VERSION}" == "xtrue" ]; then travis_retry go get -v -x github.com/axw/gocov/gocov; fi
 script:
   - travis_retry go get -v -x github.com/kwilczynski/container/stack
-  - go test -v -x $(go list ./...)
-  - if [ "x${FRESH_VERSION}" == "xtrue" ]; then pushd ${PWD}/stack; gocov test $(go list ./...) | gocov report; popd; fi
+  - |
+    if [ "x${FRESH_VERSION}" == "xtrue" ]; then
+      go test -v -x -covermode=count -coverprofile=${COVER_PROFILE} $(go list ./...)
+      gocov convert $COVER_PROFILE | gocov report
+    else
+      go test -v -x $(go list ./...)
+    fi
