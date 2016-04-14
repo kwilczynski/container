@@ -15,6 +15,9 @@ branches:
   only:
     - master
 
+before_install:
+  - make tools
+
 install: true
 
 before_script:
