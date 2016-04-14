@@ -23,7 +23,8 @@ import (
 	"github.com/kwilczynski/container/stack"
 )
 
-func Example_Basic() {
+//
+func ExampleStack_basic() {
 	s := stack.New()
 	s.Push("World")
 	s.Push("Hello")
@@ -42,7 +43,8 @@ func Example_Basic() {
 	// World
 }
 
-func Example_Search() {
+//
+func ExampleStack_search() {
 	s := stack.New()
 
 	type Person struct {
