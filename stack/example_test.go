@@ -1,7 +1,7 @@
 /*
  * example_test.go
  *
- * Copyright 2013 Krzysztof Wilczynski
+ * Copyright 2013-2016 Krzysztof Wilczynski
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@ package stack_test
 
 import (
 	"fmt"
+
 	"github.com/kwilczynski/container/stack"
 )
 
-func ExampleStack() {
+func Example_Basic() {
 	s := stack.New()
 	s.Push("World")
 	s.Push("Hello")
@@ -41,7 +42,7 @@ func ExampleStack() {
 	// World
 }
 
-func ExampleStack_Search() {
+func Example_Search() {
 	s := stack.New()
 
 	type Person struct {
