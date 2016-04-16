@@ -15,10 +15,13 @@ branches:
   only:
     - master
 
-before_install:
-  - make tools
+notifications:
+  email:
+    on_success: change
+    on_failure: change
 
-install: true
+install:
+  - make tools
 
 before_script:
   - make clean
