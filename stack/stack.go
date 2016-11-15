@@ -71,10 +71,7 @@ func (s *Stack) Len() int {
 
 // Empty checks whether Stack is empty. See Len().
 func (s *Stack) Empty() bool {
-	if s.size == 0 {
-		return true
-	}
-	return false
+	return s.size == 0
 }
 
 // Push pushes an element onto the top of the Stack.
@@ -104,8 +101,8 @@ func (s *Stack) Pop() (interface{}, error) {
 	return value, nil
 }
 
-// Search checks whether an item exists on the Stack and returns the 1-based
-// position where an element is on the Stack.
+// Search checks whether an item exists on the Stack and returns the value,
+// and the 1-based position where an element is on the Stack.
 //
 // A top-most element on the stack is considered to have distance of 1, whereas
 // distance of 0 indicates that an element is not on the Stack.
@@ -119,7 +116,7 @@ func (s *Stack) Pop() (interface{}, error) {
 //
 // Search will call given callback function for every element on the Stack proceeding
 // in a descending order passing an element taken from the Stack as its argument.
-func (s *Stack) Search(f func(element interface{}) bool) (bool, int) {
+func (s *Stack) Search(f func(element interface{}) bool) (bool, int, interface{}) {
 	if f == nil || reflect.TypeOf(f).Kind() != reflect.Func {
 		panic(ErrNotAFunc)
 	}
@@ -128,8 +125,8 @@ func (s *Stack) Search(f func(element interface{}) bool) (bool, int) {
 	for e := s.top; e != nil; e = e.next {
 		distance++
 		if ok := f(e.value); ok {
-			return true, distance
+			return true, distance, e.value
 		}
 	}
-	return false, distance
+	return false, distance, nil
 }

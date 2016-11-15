@@ -264,7 +264,7 @@ func TestStack_Search(t *testing.T) {
 		s.Push(i)
 	}
 
-	b, v := s.Search(func(v interface{}) bool {
+	b, v, _ := s.Search(func(v interface{}) bool {
 		return v == 1
 	})
 
@@ -276,7 +276,7 @@ func TestStack_Search(t *testing.T) {
 	s.Pop()
 	s.Pop()
 
-	b, v = s.Search(func(v interface{}) bool {
+	b, v, _ = s.Search(func(v interface{}) bool {
 		return v == 1
 	})
 
@@ -287,13 +287,28 @@ func TestStack_Search(t *testing.T) {
 
 	s.Init()
 
-	b, v = s.Search(func(v interface{}) bool {
+	b, v, _ = s.Search(func(v interface{}) bool {
 		return v == 1
 	})
 
 	if b != false || v != s.Len() {
 		t.Errorf("value given {%v, %d}, want {%v, %d}",
 			b, v, false, s.Len())
+	}
+
+	s.Push(`a`)
+	s.Push(`b`)
+	s.Push(`c`)
+
+	var e interface{}
+
+	b, v, e = s.Search(func(v interface{}) bool {
+		return v == `b`
+	})
+
+	if b != true || v != 2 || e != `b` {
+		t.Errorf("value given {%v, %d, %v}, want {%v, %d, %v}",
+			b, v, e, true, 2, `b`)
 	}
 
 	defer func() {
