@@ -59,10 +59,10 @@ clean:
 
 tools:
 	go get github.com/axw/gocov/gocov
-	go get github.com/golang/lint/golint
 	go get github.com/gordonklaus/ineffassign
 	go get github.com/kisielk/errcheck
 	go get github.com/matm/gocov-html
+	go get golang.org/x/lint/golint
 	go get golang.org/x/tools/cmd/goimports
 	go get honnef.co/go/tools/cmd/staticcheck
 
